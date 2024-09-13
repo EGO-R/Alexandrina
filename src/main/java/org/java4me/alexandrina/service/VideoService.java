@@ -2,12 +2,13 @@ package org.java4me.alexandrina.service;
 
 import lombok.RequiredArgsConstructor;
 import org.java4me.alexandrina.database.entity.PlaylistVideo;
-import org.java4me.alexandrina.database.entity.Video;
-import org.java4me.alexandrina.database.repository.PlaylistRepository;
+import org.java4me.alexandrina.database.repository.PlaylistVideoRepository;
 import org.java4me.alexandrina.database.repository.SortType;
 import org.java4me.alexandrina.database.repository.VideoRepository;
+import org.java4me.alexandrina.dto.PlaylistVideoCreateEditDto;
 import org.java4me.alexandrina.dto.VideoCreateEditDto;
 import org.java4me.alexandrina.dto.VideoReadDto;
+import org.java4me.alexandrina.mapper.PlaylistVideoCreateEditDtoMapper;
 import org.java4me.alexandrina.mapper.VideoCreateEditDtoMapper;
 import org.java4me.alexandrina.mapper.VideoReadDtoMapper;
 import org.springframework.data.domain.Sort;
@@ -16,10 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -28,18 +27,24 @@ public class VideoService {
     private final VideoRepository videoRepository;
     private final VideoReadDtoMapper videoReadDtoMapper;
     private final VideoCreateEditDtoMapper videoCreateEditDtoMapper;
+    private final PlaylistVideoCreateEditDtoMapper playlistVideoCreateEditDtoMapper;
+    private final PlaylistVideoRepository playlistVideoRepository;
 
     @Transactional
-    public void updatePlaylists(Long videoId, Set<Integer> playlists) {
-        var optionalVideo = videoRepository.findById(videoId);
+    public void toPlaylist(PlaylistVideoCreateEditDto playlistVideoCreateEditDto) {
+        var playlistVideo = playlistVideoCreateEditDtoMapper.map(playlistVideoCreateEditDto);
 
+        playlistVideoRepository.saveAndFlush(playlistVideo);
+    }
 
-        var video = optionalVideo
+    @Transactional
+    public void fromPlaylist(PlaylistVideoCreateEditDto playlistVideoCreateEditDto) {
+        var playlistVideo = playlistVideoRepository.findByPlaylistIdAndVideoId(
+                        playlistVideoCreateEditDto.getPlaylistId(),
+                        playlistVideoCreateEditDto.getVideoId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-
-
-        videoRepository.flush();
+        playlistVideoRepository.delete(playlistVideo);
     }
 
     public List<VideoReadDto> findVideosInPlaylist(Integer playlistId) {

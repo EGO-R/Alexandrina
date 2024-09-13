@@ -7,11 +7,10 @@
 <body>
     <h1 th:text="${video.name}">Video name</h1>
 
-    <form method="post" th:action="@{/videos/{videoId}/fromPlaylist(videoId=${video.id})}">
-        <input type="hidden" th:value="${video.id}" name="videoId">
+    <form th:if="${!video.playlists.isEmpty()}" method="post" th:action="@{/videos/{videoId}/fromPlaylist(videoId=${video.id})}">
+<!--        <input type="hidden" th:value="${video.id}" name="videoId">-->
         <label for="deletePlaylist">Delete from:
             <select id="deletePlaylist" name="playlistId">
-                <option></option>
                 <option th:each="playlist : ${video.playlists}"
                         th:text="${playlist.name}"
                         th:value="${playlist.id}">Playlist name</option>
@@ -20,11 +19,10 @@
         <button type="submit">Delete</button>
     </form>
 
-    <form method="post" th:action="@{/videos/{videoId}/toPlaylist(videoId=${video.id})}">
-        <input type="hidden" th:value="${video.id}" name="videoId">
+    <form th:if="${!playlists.isEmpty()}" method="post" th:action="@{/videos/{videoId}/toPlaylist(videoId=${video.id})}">
+<!--        <input type="hidden" th:value="${video.id}" name="videoId">-->
         <label for="addPlaylist">Add to:
             <select id="addPlaylist" name="playlistId">
-                <option></option>
                 <option th:each="playlist : ${playlists}"
                         th:text="${playlist.name}"
                         th:value="${playlist.id}">Playlist name</option>

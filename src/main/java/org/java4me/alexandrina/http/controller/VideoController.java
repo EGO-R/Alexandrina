@@ -1,8 +1,8 @@
 package org.java4me.alexandrina.http.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.java4me.alexandrina.dto.PlaylistVideoCreateEditDto;
 import org.java4me.alexandrina.dto.VideoCreateEditDto;
-import org.java4me.alexandrina.dto.VideoReadDto;
 import org.java4me.alexandrina.service.PlaylistService;
 import org.java4me.alexandrina.service.VideoService;
 import org.springframework.http.HttpStatus;
@@ -11,8 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.*;
 
 @Controller
 @RequestMapping("/videos")
@@ -51,9 +49,24 @@ public class VideoController {
     }
 
     @PostMapping("/{id}/toPlaylist")
-    public String toPlaylist(@RequestParam Optional<Set<Integer>> optPlaylists,
+    public String toPlaylist(@RequestParam Integer playlistId,
                              @PathVariable("id") Long videoId) {
-        var playlists = optPlaylists.orElseGet(HashSet::new);
+        videoService.toPlaylist(PlaylistVideoCreateEditDto.builder()
+                .playlistId(playlistId)
+                .videoId(videoId)
+                .build());
         return "redirect:/videos/{id}";
     }
+
+    @PostMapping("/{id}/fromPlaylist")
+    public String fromPlaylist(@RequestParam Integer playlistId,
+                             @PathVariable("id") Long videoId) {
+        videoService.fromPlaylist(PlaylistVideoCreateEditDto.builder()
+                .playlistId(playlistId)
+                .videoId(videoId)
+                .build());
+        return "redirect:/videos/{id}";
+    }
+
+    // TODO: 13.09.2024 Add video delete/edit
 }

@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface VideoRepository extends JpaRepository<Video, Long> {
-    @Query("select p.video from PlaylistVideo p where p.id = :id")
+    @Query("select p.video from PlaylistVideo p where p.playlist.id = :id")
     List<Video> findByPlaylist(Integer id, Sort sort);
 }
