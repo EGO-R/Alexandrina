@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Videos</title>
+</head>
+<body>
+    <h1 th:text="${video.name}">Video name</h1>
+
+    <form method="post" th:action="@{/videos/{videoId}/fromPlaylist(videoId=${video.id})}">
+        <input type="hidden" th:value="${video.id}" name="videoId">
+        <label for="deletePlaylist">Delete from:
+            <select id="deletePlaylist" name="playlistId">
+                <option></option>
+                <option th:each="playlist : ${video.playlists}"
+                        th:text="${playlist.name}"
+                        th:value="${playlist.id}">Playlist name</option>
+            </select>
+        </label>
+        <button type="submit">Delete</button>
+    </form>
+
+    <form method="post" th:action="@{/videos/{videoId}/toPlaylist(videoId=${video.id})}">
+        <input type="hidden" th:value="${video.id}" name="videoId">
+        <label for="addPlaylist">Add to:
+            <select id="addPlaylist" name="playlistId">
+                <option></option>
+                <option th:each="playlist : ${playlists}"
+                        th:text="${playlist.name}"
+                        th:value="${playlist.id}">Playlist name</option>
+            </select>
+        </label>
+        <button type="submit">Add</button>
+    </form>
+
+
+    <footer th:insert="~{fragments :: footer}">Footer</footer>
+</body>
+</html>

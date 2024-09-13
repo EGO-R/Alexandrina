@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All videos</title>
+</head>
+<body>
+    <h1 th:text="${playlistName}"></h1>
+    <div>
+        <div th:each="video : ${videos}">
+            <a th:href="@{/videos/{videoId}(videoId=${video.id})}" th:text="${video.name}"></a>
+        </div>
+    </div>
+
+
+    <footer th:insert="~{fragments :: footer}">Footer</footer>
+</body>
+</html>
