@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Videos</title>
+    <title th:text="${video.name}">Video name</title>
 </head>
 <body>
     <h1 th:text="${video.name}">Video name</h1>
@@ -30,6 +30,10 @@
         </label>
         <button type="submit">Add</button>
     </form>
+
+    <div>
+        <a th:href="@{/videos/{videoId}/edit(videoId=${video.id})}">Edit video info</a>
+    </div>
 
 
     <footer th:insert="~{fragments :: footer}">Footer</footer>

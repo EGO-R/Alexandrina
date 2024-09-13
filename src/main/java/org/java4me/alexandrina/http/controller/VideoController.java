@@ -22,7 +22,7 @@ public class VideoController {
     @GetMapping
     public String getAllVideos(Model model) {
         model.addAttribute("videos", videoService.findAll());
-        return "content/videos";
+        return "video/videos";
     }
 
     @GetMapping("/{id}")
@@ -35,12 +35,12 @@ public class VideoController {
 
         model.addAttribute("playlists", playlistService.findExceptVideo(video.getId()));
 
-        return "content/video";
+        return "video/video";
     }
 
     @GetMapping("/create")
     public String createForm() {
-        return "content/new_video";
+        return "video/new_video";
     }
 
     @PostMapping("/create")
@@ -61,12 +61,40 @@ public class VideoController {
     @PostMapping("/{id}/fromPlaylist")
     public String fromPlaylist(@RequestParam Integer playlistId,
                              @PathVariable("id") Long videoId) {
-        videoService.fromPlaylist(PlaylistVideoCreateEditDto.builder()
+        var playlistVideoCreateEditDto = PlaylistVideoCreateEditDto.builder()
                 .playlistId(playlistId)
                 .videoId(videoId)
-                .build());
+                .build();
+        if (!videoService.fromPlaylist(playlistVideoCreateEditDto))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
         return "redirect:/videos/{id}";
     }
 
-    // TODO: 13.09.2024 Add video delete/edit
+    @GetMapping("/{id}/edit")
+    public String getUpdate(@PathVariable("id") Long id,
+                         Model model) {
+        videoService.findById(id)
+                .map(video -> model.addAttribute("video", video))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        return "video/edit_video";
+    }
+
+    @PostMapping("/{id}/update")
+    public String update(@PathVariable("id") Long id,
+                         @Validated VideoCreateEditDto video) {
+        return videoService.update(video, id)
+                .map(it -> "redirect:/videos/{id}/edit")
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable("id") Long id) {
+        if (!videoService.delete(id))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return "redirect:/videos";
+    }
+
+    // TODO: 13.09.2024 add playlist edit, form exceptions
 }

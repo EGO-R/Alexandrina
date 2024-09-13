@@ -12,10 +12,8 @@ import org.java4me.alexandrina.mapper.PlaylistVideoCreateEditDtoMapper;
 import org.java4me.alexandrina.mapper.VideoCreateEditDtoMapper;
 import org.java4me.alexandrina.mapper.VideoReadDtoMapper;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,13 +36,15 @@ public class VideoService {
     }
 
     @Transactional
-    public void fromPlaylist(PlaylistVideoCreateEditDto playlistVideoCreateEditDto) {
-        var playlistVideo = playlistVideoRepository.findByPlaylistIdAndVideoId(
+    public boolean fromPlaylist(PlaylistVideoCreateEditDto playlistVideoCreateEditDto) {
+        return playlistVideoRepository.findByPlaylistIdAndVideoId(
                         playlistVideoCreateEditDto.getPlaylistId(),
                         playlistVideoCreateEditDto.getVideoId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                        .map(entity -> {
+                            playlistVideoRepository.delete(entity);
+                            return true;
+                        }) .orElse(false);
 
-        playlistVideoRepository.delete(playlistVideo);
     }
 
     public List<VideoReadDto> findVideosInPlaylist(Integer playlistId) {
@@ -84,5 +84,23 @@ public class VideoService {
                 .map(videoRepository::save)
                 .map(videoReadDtoMapper::map)
                 .orElseThrow();
+    }
+
+    @Transactional
+    public Optional<VideoReadDto> update(VideoCreateEditDto videoCreateEditDto, Long id) {
+        return videoRepository.findById(id)
+                .map(video -> videoCreateEditDtoMapper.mapObject(videoCreateEditDto, video))
+                .map(videoRepository::saveAndFlush)
+                .map(videoReadDtoMapper::map);
+    }
+
+    @Transactional
+    public boolean delete(Long id) {
+        return videoRepository.findById(id)
+                .map(entity -> {
+                    videoRepository.delete(entity);
+                    return true;
+                })
+                .orElse(false);
     }
 }

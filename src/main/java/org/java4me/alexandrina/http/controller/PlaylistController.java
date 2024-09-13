@@ -2,7 +2,6 @@ package org.java4me.alexandrina.http.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.java4me.alexandrina.dto.PlaylistCreateEditDto;
-import org.java4me.alexandrina.dto.VideoCreateEditDto;
 import org.java4me.alexandrina.service.PlaylistService;
 import org.java4me.alexandrina.service.VideoService;
 import org.springframework.http.HttpStatus;
@@ -25,13 +24,12 @@ public class PlaylistController {
     @GetMapping
     public String getAllPlaylists(Model model) {
         model.addAttribute("playlists", playlistService.findAll());
-        return "content/playlists";
+        return "playlist/playlists";
     }
 
     @GetMapping("/{id}")
     public String getPlaylist(Model model,
                               @PathVariable("id") Integer id) {
-        // TODO: 11.09.2024 check sort
         playlistService.findById(id)
                         .map(playlist ->
                                 model.addAttribute("playlistName", playlist.getName()))
@@ -39,12 +37,12 @@ public class PlaylistController {
 
         model.addAttribute("videos", videoService.findVideosInPlaylist(id));
 
-        return "content/playlist";
+        return "playlist/playlist";
     }
 
     @GetMapping("/create")
     public String createForm() {
-        return "content/new_playlist";
+        return "playlist/new_playlist";
     }
 
     @PostMapping("/create")
