@@ -2,10 +2,13 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${playlistName}">Playlist name</title>
+    <title th:text="${playlist.name}">Playlist name</title>
 </head>
 <body>
-    <h1 th:text="${playlistName}"></h1>
+    <h1 th:text="${playlist.name}"></h1>
+    <div>
+        <a th:href="@{/playlists/{playlistId}/edit(playlistId=${playlist.id})}">Edit</a>
+    </div>
     <div>
         <div th:each="video : ${videos}">
             <a th:href="@{/videos/{videoId}(videoId=${video.id})}" th:text="${video.name}"></a>

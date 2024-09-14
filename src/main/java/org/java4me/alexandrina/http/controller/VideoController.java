@@ -1,10 +1,12 @@
 package org.java4me.alexandrina.http.controller;
 
+import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
 import org.java4me.alexandrina.dto.PlaylistVideoCreateEditDto;
 import org.java4me.alexandrina.dto.VideoCreateEditDto;
 import org.java4me.alexandrina.service.PlaylistService;
 import org.java4me.alexandrina.service.VideoService;
+import org.java4me.alexandrina.validation.CreateAction;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,7 +46,7 @@ public class VideoController {
     }
 
     @PostMapping("/create")
-    public String create(@Validated VideoCreateEditDto video) {
+    public String create(@Validated({Default.class, CreateAction.class}) VideoCreateEditDto video) {
         return "redirect:/videos/" + videoService.create(video).getId();
     }
 

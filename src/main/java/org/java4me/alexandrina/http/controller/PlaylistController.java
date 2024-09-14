@@ -32,7 +32,7 @@ public class PlaylistController {
                               @PathVariable("id") Integer id) {
         playlistService.findById(id)
                         .map(playlist ->
-                                model.addAttribute("playlistName", playlist.getName()))
+                                model.addAttribute("playlist", playlist))
                                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         model.addAttribute("videos", videoService.findVideosInPlaylist(id));
@@ -48,5 +48,30 @@ public class PlaylistController {
     @PostMapping("/create")
     public String create(@Validated PlaylistCreateEditDto playlist) {
         return "redirect:/playlists/" + playlistService.create(playlist).getId();
+    }
+
+    @GetMapping("/{id}/edit")
+    public String getEdit(@PathVariable("id") Integer id,
+                          Model model) {
+        return playlistService.findById(id)
+                .map(entity -> model.addAttribute("playlist", entity))
+                .map(it -> "playlist/edit_playlist")
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping("/{id}/update")
+    public String update(@PathVariable("id") Integer id,
+                         @Validated PlaylistCreateEditDto playlist) {
+        return playlistService.update(id, playlist)
+                .map(it -> "redirect:/playlists/{id}/edit")
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable("id") Integer id) {
+        if (!playlistService.delete(id))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        return "redirect:/playlists";
     }
 }

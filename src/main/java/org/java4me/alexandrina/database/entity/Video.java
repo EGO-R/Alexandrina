@@ -29,4 +29,6 @@ public class Video extends AuditingEntity {
     @Builder.Default
     @OneToMany(mappedBy = "video")
     private List<VideoTag> videoTags = new ArrayList<>();
+
+    // TODO: 14.09.2024 add author
 }

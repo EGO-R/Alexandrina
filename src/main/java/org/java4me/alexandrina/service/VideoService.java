@@ -1,6 +1,7 @@
 package org.java4me.alexandrina.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.java4me.alexandrina.database.entity.PlaylistVideo;
 import org.java4me.alexandrina.database.repository.PlaylistVideoRepository;
 import org.java4me.alexandrina.database.repository.SortType;
@@ -14,6 +15,7 @@ import org.java4me.alexandrina.mapper.VideoReadDtoMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +29,7 @@ public class VideoService {
     private final VideoCreateEditDtoMapper videoCreateEditDtoMapper;
     private final PlaylistVideoCreateEditDtoMapper playlistVideoCreateEditDtoMapper;
     private final PlaylistVideoRepository playlistVideoRepository;
+    private final VideoStorageService videoStorageService;
 
     @Transactional
     public void toPlaylist(PlaylistVideoCreateEditDto playlistVideoCreateEditDto) {
@@ -81,9 +84,17 @@ public class VideoService {
     public VideoReadDto create(VideoCreateEditDto videoCreateEditDto) {
         return Optional.of(videoCreateEditDto)
                 .map(videoCreateEditDtoMapper::map)
-                .map(videoRepository::save)
-                .map(videoReadDtoMapper::map)
+                .map(videoRepository::saveAndFlush)
+                .map(entity -> {
+                    uploadVideo(entity.getId().toString(), videoCreateEditDto.getVideo());
+                    return videoReadDtoMapper.map(entity);
+                })
                 .orElseThrow();
+    }
+
+    @SneakyThrows
+    private void uploadVideo(String name, MultipartFile video) {
+        videoStorageService.upload(name, video.getInputStream());
     }
 
     @Transactional
@@ -99,6 +110,7 @@ public class VideoService {
         return videoRepository.findById(id)
                 .map(entity -> {
                     videoRepository.delete(entity);
+                    videoStorageService.delete(id.toString());
                     return true;
                 })
                 .orElse(false);

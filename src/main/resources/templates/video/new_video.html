@@ -7,7 +7,10 @@
 <body>
     <h1>New video</h1>
 
-    <form method="post" th:action="@{/videos/create}">
+    <form method="post" th:action="@{/videos/create}" enctype="multipart/form-data">
+        <label for="video">Video:
+            <input id="video" type="file" name="video">
+        </label><br>
         <label for="name">Name:
             <input id="name" type="text" name="name">
         </label>

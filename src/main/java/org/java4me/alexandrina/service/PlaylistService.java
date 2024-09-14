@@ -46,4 +46,22 @@ public class PlaylistService {
                 .map(playlistReadDtoMapper::map)
                 .orElseThrow();
     }
+
+    @Transactional
+    public Optional<PlaylistReadDto> update(Integer id, PlaylistCreateEditDto playlistCreateEditDto) {
+        return playlistRepository.findById(id)
+                .map(entity -> playlistCreateEditDtoMapper.mapObject(playlistCreateEditDto, entity))
+                .map(playlistRepository::saveAndFlush)
+                .map(playlistReadDtoMapper::map);
+    }
+
+    @Transactional
+    public boolean delete(Integer id) {
+        return playlistRepository.findById(id)
+                .map(entity -> {
+                    playlistRepository.delete(entity);
+                    return true;
+                })
+                .orElse(false);
+    }
 }

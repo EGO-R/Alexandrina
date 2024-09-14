@@ -5,10 +5,12 @@
     <title th:text="${video.name}">Video name</title>
 </head>
 <body>
+    <video controls style="height: 80vh">
+        <source th:src="@{/api/v1/videos/{videoId}(videoId=${video.id})}" type="video/mp4">
+    </video>
     <h1 th:text="${video.name}">Video name</h1>
 
     <form th:if="${!video.playlists.isEmpty()}" method="post" th:action="@{/videos/{videoId}/fromPlaylist(videoId=${video.id})}">
-<!--        <input type="hidden" th:value="${video.id}" name="videoId">-->
         <label for="deletePlaylist">Delete from:
             <select id="deletePlaylist" name="playlistId">
                 <option th:each="playlist : ${video.playlists}"
@@ -20,7 +22,6 @@
     </form>
 
     <form th:if="${!playlists.isEmpty()}" method="post" th:action="@{/videos/{videoId}/toPlaylist(videoId=${video.id})}">
-<!--        <input type="hidden" th:value="${video.id}" name="videoId">-->
         <label for="addPlaylist">Add to:
             <select id="addPlaylist" name="playlistId">
                 <option th:each="playlist : ${playlists}"
