@@ -13,7 +13,7 @@ import java.time.Instant;
 @Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class AuditingEntity{
+public abstract class AuditingEntity {
 
     @LastModifiedDate
     private Instant modifiedAt;

@@ -5,6 +5,8 @@
     <title>Playlists</title>
 </head>
 <body>
+<header th:insert="~{fragments :: logout}">Logout</header>
+
     <h1>Playlists</h1>
     <div>
         <a th:href="@{/playlists/create}">New playlist</a>

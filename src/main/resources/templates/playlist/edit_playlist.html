@@ -5,6 +5,8 @@
     <title th:text="|Edit ${playlist.name}|">Playlist name</title>
 </head>
 <body>
+    <header th:insert="~{fragments :: logout}">Logout</header>
+
     <form th:action="@{/playlists/{playlistId}/update(playlistId=${playlist.id})}" method="post">
         <label for="name">Name:
             <input id="name" type="text" name="name" th:value="${playlist.name}">

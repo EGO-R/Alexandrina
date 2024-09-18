@@ -5,6 +5,8 @@
     <title>New playlist</title>
 </head>
 <body>
+<header th:insert="~{fragments :: logout}">Logout</header>
+
     <h1>New playlist</h1>
 
     <form method="post" th:action="@{/playlists/create}">

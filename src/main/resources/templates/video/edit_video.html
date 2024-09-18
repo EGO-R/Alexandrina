@@ -5,12 +5,14 @@
     <title th:text="|Edit ${video.name}|">Edit</title>
 </head>
 <body>
+<header th:insert="~{fragments :: logout}">Logout</header>
+
     <h1 th:text="|Editting ${video.name}:|">Video name</h1>
 
     <form th:action="@{/videos/{videoId}/update(videoId=${video.id})}" method="post">
         <label for="name">Name:
             <input id="name" type="text" name="name" th:value="${video.name}">
-        </label>
+        </label><br>
         <button type="submit">Update</button>
     </form>
 

@@ -5,6 +5,8 @@
     <title th:text="${playlist.name}">Playlist name</title>
 </head>
 <body>
+<header th:insert="~{fragments :: logout}">Logout</header>
+
     <h1 th:text="${playlist.name}"></h1>
     <div>
         <a th:href="@{/playlists/{playlistId}/edit(playlistId=${playlist.id})}">Edit</a>
