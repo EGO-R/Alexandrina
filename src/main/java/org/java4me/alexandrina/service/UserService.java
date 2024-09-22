@@ -1,6 +1,7 @@
 package org.java4me.alexandrina.service;
 
 import lombok.RequiredArgsConstructor;
+import org.java4me.alexandrina.database.entity.Role;
 import org.java4me.alexandrina.database.repository.UserRepository;
 import org.java4me.alexandrina.dto.UserCreateEditDto;
 import org.java4me.alexandrina.dto.UserReadDto;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,6 +31,15 @@ public class UserService implements UserDetailsService {
                 .map(userRepository::saveAndFlush)
                 .map(userReadDtoMapper::map)
                 .orElseThrow();
+    }
+
+    @Transactional
+    public void testPersistence(Long id) {
+        var user = userRepository.findById(id).orElseThrow();
+
+        user.setRole(Role.ADMIN);
+
+        userRepository.flush();
     }
 
     @Override

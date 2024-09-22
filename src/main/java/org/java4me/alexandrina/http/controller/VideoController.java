@@ -2,11 +2,14 @@ package org.java4me.alexandrina.http.controller;
 
 import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
+import org.java4me.alexandrina.dto.PageResponse;
 import org.java4me.alexandrina.dto.PlaylistVideoCreateEditDto;
 import org.java4me.alexandrina.dto.VideoCreateEditDto;
+import org.java4me.alexandrina.dto.VideoFilter;
 import org.java4me.alexandrina.service.PlaylistService;
 import org.java4me.alexandrina.service.VideoService;
 import org.java4me.alexandrina.validation.CreateAction;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +25,12 @@ public class VideoController {
     private final PlaylistService playlistService;
 
     @GetMapping
-    public String getAllVideos(Model model) {
-        model.addAttribute("videos", videoService.findAll());
+    public String getAllVideos(Model model,
+                               VideoFilter filter,
+                               Pageable pageable) {
+
+        model.addAttribute("filter", filter);
+        model.addAttribute("page", PageResponse.of(videoService.findAll(filter, pageable)));
         return "video/videos";
     }
 
@@ -97,6 +104,4 @@ public class VideoController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         return "redirect:/videos";
     }
-
-    // TODO: 13.09.2024 add playlist edit, form exceptions
 }

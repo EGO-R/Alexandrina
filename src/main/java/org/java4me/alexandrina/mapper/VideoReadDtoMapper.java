@@ -1,14 +1,12 @@
 package org.java4me.alexandrina.mapper;
 
 import lombok.RequiredArgsConstructor;
-import org.java4me.alexandrina.database.entity.Playlist;
 import org.java4me.alexandrina.database.entity.PlaylistVideo;
 import org.java4me.alexandrina.database.entity.Video;
 import org.java4me.alexandrina.dto.VideoReadDto;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 @Component
 @RequiredArgsConstructor
@@ -26,6 +24,7 @@ public class VideoReadDtoMapper implements Mapper<Video, VideoReadDto> {
                 .id(obj.getId())
                 .name(obj.getName())
                 .playlists(playlists)
+                .username(obj.getCreatedBy())
                 .build();
     }
 }

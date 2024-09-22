@@ -2,13 +2,21 @@
 
 --changeset EGO-R:1
 alter table video
-    add column modified_at timestamp not null ;
+    add column created_by  varchar(32) not null,
+    add column created_at  timestamp   not null,
+    add column modified_at timestamp   not null;
 
 --changeset EGO-R:2
 alter table playlist
-    add column modified_at timestamp not null;
+    add column created_by  varchar(32) not null,
+    add column created_at  timestamp   not null,
+    add column modified_at timestamp   not null;
 
 --changeset EGO-R:3
 alter table playlist_video
-    add column modified_at timestamp not null;
+    add column created_by  varchar(32) not null,
+    add column created_at  timestamp   not null,
+    add column modified_at timestamp   not null;
+
+
 

@@ -11,8 +11,27 @@
     <div>
         <a th:href="@{/videos/create}">New video</a>
     </div>
+
+    <form th:action="@{/videos}" method="get">
+        <label for="name">Name:
+            <input id="name" type="text" name="name" th:value="${filter.name}">
+        </label><br>
+        <label for="username">Author:
+            <input id="username" type="text" name="username" th:value="${filter.username}">
+        </label><br>
+        <div>
+            <label for="page">Page:
+                <input id="page" type="number" name="page" th:value="${page.metadata.page}">
+            </label><br>
+            <label for="size">Size:
+                <input id="size" type="number" name="size" th:value="${page.metadata.size}">
+            </label><br>
+        </div>
+        <button type="submit">Filter</button>
+    </form>
+
     <div>
-        <div th:each="video : ${videos}">
+        <div th:each="video : ${page.content}">
             <a th:href="@{/videos/{videoId}(videoId=${video.id})}" th:text="${video.name}"></a>
         </div>
     </div>

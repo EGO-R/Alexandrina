@@ -8,10 +8,14 @@ import org.java4me.alexandrina.database.repository.SortType;
 import org.java4me.alexandrina.database.repository.VideoRepository;
 import org.java4me.alexandrina.dto.PlaylistVideoCreateEditDto;
 import org.java4me.alexandrina.dto.VideoCreateEditDto;
+import org.java4me.alexandrina.dto.VideoFilter;
 import org.java4me.alexandrina.dto.VideoReadDto;
 import org.java4me.alexandrina.mapper.PlaylistVideoCreateEditDtoMapper;
 import org.java4me.alexandrina.mapper.VideoCreateEditDtoMapper;
 import org.java4me.alexandrina.mapper.VideoReadDtoMapper;
+import org.java4me.alexandrina.querydsl.QPredicates;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.java4me.alexandrina.database.entity.QVideo.video;
 
 @Service
 @RequiredArgsConstructor
@@ -66,6 +72,17 @@ public class VideoService {
         return videoRepository.findByPlaylist(playlistId, sort).stream()
                 .map(videoReadDtoMapper::map)
                 .toList();
+    }
+
+
+    public Page<VideoReadDto> findAll(VideoFilter filter, Pageable pageable) {
+        var predicate = QPredicates.builder()
+                .add(filter.getName(), video.name::containsIgnoreCase)
+                .add(filter.getUsername(), video.createdBy::containsIgnoreCase)
+                .build();
+
+        return videoRepository.findAll(predicate, pageable)
+                .map(videoReadDtoMapper::map);
     }
 
 

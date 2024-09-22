@@ -37,7 +37,7 @@ public class VideoStorageService {
              content) {
             int bufferSize = 1024;
             byte[] buffer = new byte[bufferSize];
-            int len = 0;
+            int len;
             while ((len = content.read(buffer)) != -1) {
                 output.write(buffer, 0, len);
             }
@@ -59,6 +59,7 @@ public class VideoStorageService {
             end = fileLength - 1;
         else
             end = start + PORTION_SIZE;
+
         var contentLength = end - start + 1;
 
         var inputStream = new FileInputStream(file);
