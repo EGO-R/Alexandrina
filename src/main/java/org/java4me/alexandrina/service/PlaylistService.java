@@ -2,7 +2,6 @@ package org.java4me.alexandrina.service;
 
 import lombok.RequiredArgsConstructor;
 import org.java4me.alexandrina.database.repository.PlaylistRepository;
-import org.java4me.alexandrina.database.repository.VideoRepository;
 import org.java4me.alexandrina.dto.PlaylistCreateEditDto;
 import org.java4me.alexandrina.dto.PlaylistReadDto;
 import org.java4me.alexandrina.mapper.PlaylistCreateEditDtoMapper;

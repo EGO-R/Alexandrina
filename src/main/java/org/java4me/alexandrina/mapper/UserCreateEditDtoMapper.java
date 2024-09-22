@@ -1,9 +1,7 @@
 package org.java4me.alexandrina.mapper;
 
 import lombok.RequiredArgsConstructor;
-import org.java4me.alexandrina.database.entity.Playlist;
 import org.java4me.alexandrina.database.entity.User;
-import org.java4me.alexandrina.dto.PlaylistCreateEditDto;
 import org.java4me.alexandrina.dto.UserCreateEditDto;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

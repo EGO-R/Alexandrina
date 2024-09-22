@@ -1,9 +1,7 @@
 package org.java4me.alexandrina.mapper;
 
 import org.java4me.alexandrina.database.entity.Playlist;
-import org.java4me.alexandrina.database.entity.Video;
 import org.java4me.alexandrina.dto.PlaylistCreateEditDto;
-import org.java4me.alexandrina.dto.VideoCreateEditDto;
 import org.springframework.stereotype.Component;
 
 @Component
