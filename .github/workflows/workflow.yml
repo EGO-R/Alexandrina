@@ -28,6 +28,7 @@ jobs:
         uses: actions/setup-java@v4.4.0
         with: 
           java-version: 21
+          distribution: temurin
       
       - name: Run tests
         run: ./gradlew tests
