@@ -40,7 +40,7 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -55,8 +55,7 @@ jobs:
             echo '---start---'
             cd ${{ secrets.PROJECT_FOLDER }};
             
-            echo '---start git---'
-            git checkout main;
+            echo '---git pull---'
             git pull;
 
             echo '---down containers---'
