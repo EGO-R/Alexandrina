@@ -1,0 +1,63 @@
+name: "Alexandrina CI"
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_DB: alexandrina
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: Egor2004
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Install java
+        uses: actions/setup-java@v4.4.0
+        with: 
+          java-version: 21
+      
+      - name: Run tests
+        run: ./gradlew tests
+
+        
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Run command
+        uses: D3rHase/ssh-command-action@latest
+        with:
+          host: ${{secrets.SSH_HOST}}
+          user: ${{secrets.SSH_USER}}
+          private_key: ${{secrets.SSH_PRIVATE_KEY}}
+          command: |
+            echo '---start---'
+            cd ${{ secrets.PROJECT_FOLDER }};
+            
+            echo '---start git---'
+            git checkout main;
+            git pull;
+
+            echo '---down containers---'
+            docker-compose --file docker-compose.yml down;
+
+            echo '---up containers---'
+            docker-compose --file docker-compose.yml up -d;
+  
