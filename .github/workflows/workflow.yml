@@ -34,7 +34,7 @@ jobs:
         run: chmod +x ./gradlew
       
       - name: Run tests
-        run: ./gradlew tests
+        run: ./gradlew test
 
         
   deploy:
