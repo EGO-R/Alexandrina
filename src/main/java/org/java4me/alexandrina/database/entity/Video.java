@@ -22,6 +22,10 @@ public class Video extends AuditingEntity {
     @Column(nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Privacy privacy;
+
     @Builder.Default
     @OneToMany(mappedBy = "video")
     private List<PlaylistVideo> playlistVideos = new ArrayList<>();

@@ -9,8 +9,10 @@ import lombok.Value;
 @EqualsAndHashCode(of = "id")
 @Builder
 public class PlaylistReadDto {
-    @NotNull
+
     Integer id;
-    @NotNull
+
     String name;
+
+    String username;
 }

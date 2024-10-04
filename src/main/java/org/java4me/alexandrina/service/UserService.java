@@ -42,4 +42,7 @@ public class UserService implements UserDetailsService {
                 ))
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + username));
     }
+
+    // TODO: 22.09.2024 show public user's playlists in profile
+    // TODO: 22.09.2024 public/private videos
 }

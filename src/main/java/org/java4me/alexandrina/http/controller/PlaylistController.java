@@ -74,4 +74,9 @@ public class PlaylistController {
 
         return "redirect:/playlists";
     }
+
+    // TODO: 22.09.2024 user can get another user's playlist
+    // TODO: 22.09.2024 show to user not his playlists
+    // TODO: 22.09.2024 user can add video to someone else's playlist]
+    // TODO: 22.09.2024 aff filter
 }

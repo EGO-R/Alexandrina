@@ -7,7 +7,7 @@
 <body>
 <header th:insert="~{fragments :: logout}">Logout</header>
 
-    <video controls style="height: 80vh">
+    <video controls style="width: 98vw; left: 1vw">
         <source th:src="@{/api/v1/videos/{videoId}(videoId=${video.id})}" type="video/mp4">
     </video>
     <h1 th:text="${video.name}">Video name</h1>
